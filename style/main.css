@@ -1,0 +1,22 @@
+#FotoImg{
+    width: 50%;
+}
+
+
+
+header{
+    background-color: #ffdbba;    
+}
+
+main{
+    background-color: #e1e5ef;
+}
+footer{
+    background: #ffdbba;
+    width: 100%;
+    height: 100%;
+}
+
+.FotoFooter{
+    width: 70%;
+}
