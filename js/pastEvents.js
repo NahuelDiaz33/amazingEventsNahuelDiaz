@@ -195,29 +195,31 @@ const data = {
     ],
 };
 
-let dato= data.events[0].image
-console.log(dato);
+let añoFijo = data.currentDate
 
 function cambiarTarjetas(eventos) {
 
-    let contenedor = document.getElementById("contenedorTarjetas")
-    let tarjeta = document.createElement('div')
-    tarjeta.className = "col"
-    tarjeta.innerHTML = `
-                    <div class="card h-100">
-                        <img src=${eventos[0].image} class="card-img-top"
-                            alt="concierto">
-                        <divclass="card-body">
-                            <h5 class="card-title">${eventos[0].name}</h5>
-                            <p  class="card-text">The only concert of the most emblematic band in the world</p>
-                            <p class="card-text"><strong>Price : $150</strong></p>
-                            <a href="./pages/details.html" class="btn btn-primary">Details</a>
-                        </div>
-                    </div>
+    for (let i = 0; i < data.events.length; i++) {
+        if (añoFijo > data.events[i].date) {
+            let contenedor = document.getElementById("contenedorTarjetas")
+            let tarjeta = document.createElement('div')
+            tarjeta.className = "col"
+            tarjeta.innerHTML = `
+                            <div class="card h-100">
+                                <img src=${eventos[i].image} class="card-img-top"
+                                    alt="concierto">
+                                <divclass="card-body">
+                                    <h5 class="card-title">${eventos[i].name}</h5>
+                                    <p  class="card-text">${eventos[i].description}</p>
+                                    <p class="card-text"><strong>Price : $${eventos[i].price}</strong></p>
+                                    <a href="./pages/details.html" class="btn btn-primary">Details</a>
+                                </div>
+                            </div>
+                            `
 
-                    `
-                    
-contenedor.appendChild(tarjeta)
+            contenedor.appendChild(tarjeta)
+        }
+    }
 }
 cambiarTarjetas(data.events)
 
