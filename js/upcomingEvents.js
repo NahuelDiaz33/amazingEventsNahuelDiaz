@@ -203,19 +203,20 @@ function cambiarTarjetas(eventos) {
         if (añoFijo < data.events[i].date) {
             let contenedor = document.getElementById("contenedorTarjetas")
             let tarjeta = document.createElement('div')
-            tarjeta.className = "col"
+            tarjeta.className = "col d-flex"
             tarjeta.innerHTML = `
-                            <div class="card h-100">
-                                <img src=${eventos[i].image} class="card-img-top"
-                                    alt="concierto">
-                                <divclass="card-body">
-                                    <h5 class="card-title">${eventos[i].name}</h5>
-                                    <p  class="card-text">${eventos[i].description}</p>
-                                    <p class="card-text"><strong>Price : $${eventos[i].price}</strong></p>
-                                    <a href="./pages/details.html" class="btn btn-primary">Details</a>
-                                </div>
-                            </div>
-                            `
+            <div class="card">
+                <img src=${eventos[i].image} class="card-img-top"
+                    alt="concierto">
+                <div class="card-body d-flex flex-column ">
+                    <h5 class="card-title ">${eventos[i].name}</h5>
+                    <p  class="card-text ">${eventos[i].description}</p>
+                    <p class="card-text mt-auto"><strong>Price : $${eventos[i].price}</strong></p>
+                    <a href="../pages/details.html" class="btn btn-primary">Details</a>
+                </div>
+            </div>
+       
+            `
 
             contenedor.appendChild(tarjeta)
         }
