@@ -198,10 +198,10 @@ const data = {
 let añoFijo = data.currentDate
 
 function cambiarTarjetas(eventos) {
-
-    for (let i = 0; i < data.events.length; i++) {
+    let contenedor = document.getElementById("contenedorTarjetas")
+    contenedor.innerHTML = ''
+    for (let i = 0; i < eventos.length; i++) {
         if (añoFijo < data.events[i].date) {
-            let contenedor = document.getElementById("contenedorTarjetas")
             let tarjeta = document.createElement('div')
             tarjeta.className = "col d-flex"
             tarjeta.innerHTML = `
@@ -215,13 +215,65 @@ function cambiarTarjetas(eventos) {
                     <a href="../pages/details.html" class="btn btn-primary">Details</a>
                 </div>
             </div>
-       
             `
-
             contenedor.appendChild(tarjeta)
         }
     }
 }
+function cambiarCheck() {
+    let categoriasUnicas = new Set(data.events.map(event => event.category))
+    let contenedor = document.getElementById("contenedorCheck")
+    let categoriasArray = Array.from(categoriasUnicas)
+
+    for (let i = 0; i < categoriasArray.length; i++) {
+        const tarjeta = document.createElement("div")
+        tarjeta.className = "me-auto"
+        tarjeta.innerHTML = `
+             <div class="me-auto">
+                     <div class="form-check form-check-inline">
+                         <input class="form-check-input" type="checkbox" id="id="category-${categoriasArray[i]}" value="${categoriasArray[i]}">
+                         <label class="form-check-label" for="category-${categoriasArray[i]}"  >
+                         ${categoriasArray[i]}</label>
+                     </div>
+                 </div>                 
+        `
+        contenedor.appendChild(tarjeta)   
+    }
+    const tarjeta = document.createElement("div")
+        tarjeta.className = "me-auto"
+        tarjeta.innerHTML = `
+                    <div class="ms-auto" >
+                    <form class="d-flex ">
+                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                        <button class="btn btn-outline-secondary" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                class="bi bi-search" viewBox="0 0 16 16">
+                                <path
+                                    d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001a1 1 0 0 0 .04 1.327l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-1.327-.04zm-5.44 0A5.5 5.5 0 1 1 11.5 5.5a5.5 5.5 0 0 1-5.5 5.5z" />
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+                                  
+        `
+contenedor.appendChild(tarjeta)
+    document.querySelectorAll('.form-check-input').forEach(checkbox => {
+        checkbox.addEventListener('change', cambiarImagen)
+    });
+}
+
+function cambiarImagen() {
+    let checkboxClic = document.querySelectorAll("input[type='checkbox']:checked")
+    let valoresCheckbox = Array.from(checkboxClic).map(checkbox =>checkbox.value)
+    if (valoresCheckbox.length === 0) {
+        cambiarTarjetas(data.events)
+    } else {
+        let eventosFiltrados = data.events.filter(event => valoresCheckbox.includes(event.category))
+        cambiarTarjetas(eventosFiltrados)
+    }
+
+}
 cambiarTarjetas(data.events)
+cambiarCheck()
 
 
