@@ -199,6 +199,14 @@ const data = {
 function cambiarTarjetas(eventos) {
     let contenedor = document.getElementById("contenedorTarjetas")
     contenedor.innerHTML = '' 
+    if (eventos.length === 0) {
+        let mensaje = document.createElement('div');
+        mensaje.innerHTML = `
+        <div class="alert alert-primary text-center" role="alert">
+  NO HAY DATOS OBTENIDOS EN EL BUSCADOR. BORRE E INTENTE NUEVAMENTE! 
+`
+        contenedor.appendChild(mensaje);
+    } else {
     for (let i = 0; i < eventos.length; i++) {
         let tarjeta = document.createElement('div')
         tarjeta.className = "col d-flex"
@@ -210,13 +218,14 @@ function cambiarTarjetas(eventos) {
                                 <h5 class="card-title ">${eventos[i].name}</h5>
                                 <p  class="card-text ">${eventos[i].description}</p>
                                 <p class="card-text mt-auto"><strong>Price : $${eventos[i].price}</strong></p>
-                                <a href="./pages/details.html" class="btn btn-primary">Details</a>
+                                <a href="./pages/details.html?=" class="btn btn-primary">Details</a>
                             </div>
                         </div>
                    
                         `
         contenedor.appendChild(tarjeta)
     }
+}
 }
 
 function cambiarCheck() {
@@ -242,9 +251,9 @@ function cambiarCheck() {
     const tarjeta = document.createElement("div")
         tarjeta.className = "me-auto"
         tarjeta.innerHTML = `
-                    <div class="ms-auto" >
-                    <form class="d-flex ">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                    <div class="ms-auto" id="buscarForm" >
+                    <form class="d-flex" id="Buscar">
+                        <input class="form-control me-2" type="search" id="buscarInput" placeholder="Buscar" aria-label="Buscar">
                         <button class="btn btn-outline-secondary" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-search" viewBox="0 0 16 16">
@@ -254,26 +263,32 @@ function cambiarCheck() {
                         </button>
                     </form>
                 </div>
-                                  
-        `
+    `                  
 contenedor.appendChild(tarjeta)
     document.querySelectorAll('.form-check-input').forEach(checkbox => {
         checkbox.addEventListener('change', cambiarImagen)
-    });
-}
+    })
+     document.getElementById('buscarInput').addEventListener('input', cambiarImagen)
+     document.getElementById('buscarForm').addEventListener('submit', (e) => {
+         e.preventDefault()
+     })
+    }
 
 function cambiarImagen() {
     let checkboxClic = document.querySelectorAll("input[type='checkbox']:checked")
-    let valoresCheckbox = Array.from(checkboxClic).map(checkbox =>checkbox.value)
-    if (valoresCheckbox.length === 0) {
-        cambiarTarjetas(data.events) 
-    } else {
-        let eventosFiltrados = data.events.filter(event => valoresCheckbox.includes(event.category))
-        cambiarTarjetas(eventosFiltrados)
-    }
+    let valoresCheckbox = Array.from(checkboxClic).map(checkbox => checkbox.value)
+    let buscarTexto = document.getElementById('buscarInput').value.toLowerCase()
 
+    let eventosFiltrados = data.events.filter(event => {
+        let evento1 = valoresCheckbox.length === 0 || valoresCheckbox.includes(event.category)
+        let evento2 = event.name.toLowerCase().includes(buscarTexto) || event.description.toLowerCase().includes(buscarTexto)
+        return evento1 && evento2
+    })
+
+    cambiarTarjetas(eventosFiltrados)
 }
+
+
 cambiarTarjetas(data.events)
 cambiarCheck()
-
 

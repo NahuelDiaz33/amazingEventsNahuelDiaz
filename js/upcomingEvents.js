@@ -224,7 +224,7 @@ function cambiarCheck() {
     let categoriasUnicas = new Set(data.events.map(event => event.category))
     let contenedor = document.getElementById("contenedorCheck")
     let categoriasArray = Array.from(categoriasUnicas)
-
+    
     for (let i = 0; i < categoriasArray.length; i++) {
         const tarjeta = document.createElement("div")
         tarjeta.className = "me-auto"
@@ -239,12 +239,13 @@ function cambiarCheck() {
         `
         contenedor.appendChild(tarjeta)   
     }
+
     const tarjeta = document.createElement("div")
         tarjeta.className = "me-auto"
         tarjeta.innerHTML = `
-                    <div class="ms-auto" >
-                    <form class="d-flex ">
-                        <input class="form-control me-2" type="search" placeholder="Buscar" aria-label="Buscar">
+                    <div class="ms-auto" id="buscarForm" >
+                    <form class="d-flex id="Buscar" ">
+                        <input class="form-control me-2" type="search" id="buscarInput" placeholder="Buscar" aria-label="Buscar">
                         <button class="btn btn-outline-secondary" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                 class="bi bi-search" viewBox="0 0 16 16">
@@ -259,19 +260,25 @@ function cambiarCheck() {
 contenedor.appendChild(tarjeta)
     document.querySelectorAll('.form-check-input').forEach(checkbox => {
         checkbox.addEventListener('change', cambiarImagen)
-    });
+    })
+    document.getElementById('buscarInput').addEventListener('input', cambiarImagen)
+     document.getElementById('buscarForm').addEventListener('submit', (e) => {
+         e.preventDefault()
+     })
 }
 
 function cambiarImagen() {
     let checkboxClic = document.querySelectorAll("input[type='checkbox']:checked")
-    let valoresCheckbox = Array.from(checkboxClic).map(checkbox =>checkbox.value)
-    if (valoresCheckbox.length === 0) {
-        cambiarTarjetas(data.events)
-    } else {
-        let eventosFiltrados = data.events.filter(event => valoresCheckbox.includes(event.category))
-        cambiarTarjetas(eventosFiltrados)
-    }
+    let valoresCheckbox = Array.from(checkboxClic).map(checkbox => checkbox.value)
+    let buscarTexto = document.getElementById('buscarInput').value.toLowerCase()
 
+    let eventosFiltrados = data.events.filter(event => {
+        let evento1 = valoresCheckbox.length === 0 || valoresCheckbox.includes(event.category)
+        let evento2 = event.name.toLowerCase().includes(buscarTexto) || event.description.toLowerCase().includes(buscarTexto)
+        return evento1 && evento2
+    })
+
+    cambiarTarjetas(eventosFiltrados)
 }
 cambiarTarjetas(data.events)
 cambiarCheck()
